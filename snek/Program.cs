@@ -24,18 +24,21 @@ using System.Diagnostics.Metrics;
 Random rnd = new Random();
 ConsoleKeyInfo cki;
 string input;
-var box = DrawBox(9, 9, 0);
+var box = DrawBox(9, 9, 5);
 
-Print2DArray(box);
-
-Thread.Sleep(500);
-
-
-
+int exit = 0;
 int atCurrentPosX = 4;
 int atCurrentPosY = 4;
+
+int[] atOne = new int[2] {atCurrentPosX, atCurrentPosY};
+int[] atTwo = new int[2] {atCurrentPosX, atCurrentPosY};
+int[] atThree = new int[2] {atCurrentPosX, atCurrentPosY};
+int[] atFour = new int[2] {atCurrentPosX, atCurrentPosY};
+
 box[atCurrentPosX, atCurrentPosY] = "@";
-while (true)
+
+
+while (exit == 0)
 {
     Print2DArray(box);
 
@@ -46,6 +49,7 @@ while (true)
     switch (input)
     {
         case "UpArrow":
+            
             atCurrentPosY--;
 
             if (box[atCurrentPosY, atCurrentPosX] == "#")
@@ -107,10 +111,14 @@ while (true)
                 break;
 
             }
+        case "X":
+            exit = 1;
+            break;
             
     }
 
     box[atCurrentPosY, atCurrentPosX] = "@";
+    
 
 
 }
