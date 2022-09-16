@@ -18,21 +18,145 @@
 // Förslag: När du fått en första version av spelet att fungera, lägg till flera banor genom att hårdkoda in olika banlayout i olika 2D-arrayer. När man tagit ett visst antal äpplen på en bana så kommer man vidare till nästa.
 
 
+
 using System.Diagnostics.Metrics;
 
-
-var box = DrawBox(9, 9);
+Random rnd = new Random();
+ConsoleKeyInfo cki;
+string input;
+var box = DrawBox(9, 9, 0);
 
 Print2DArray(box);
 
 Thread.Sleep(500);
 
-box[4, 4] = "@";
-
-Print2DArray(box);
 
 
-string[,] DrawBox(int height, int width)
+int atCurrentPosX = 4;
+int atCurrentPosY = 4;
+box[atCurrentPosX, atCurrentPosY] = "@";
+while (true)
+{
+    Print2DArray(box);
+
+    while (Console.KeyAvailable == false)
+        Thread.Sleep(250);
+    cki = Console.ReadKey(true);
+    input = cki.Key.ToString();
+    switch (input)
+    {
+        case "UpArrow":
+            atCurrentPosY--;
+
+            if (box[atCurrentPosY, atCurrentPosX] == "#")
+            {
+                atCurrentPosY++;
+                break;
+            }
+
+            else
+            {
+                box[atCurrentPosY+1, atCurrentPosX] = "-";
+                break;
+            }
+            
+        case "DownArrow":
+            
+            atCurrentPosY++;
+            if (box[atCurrentPosY, atCurrentPosX] == "#")
+            {
+                atCurrentPosY--;
+                break;
+            }
+
+            else
+            {
+                box[atCurrentPosY-1, atCurrentPosX] = "-";
+                break;
+            }
+            
+        case "LeftArrow":
+            
+            atCurrentPosX--;
+            if (box[atCurrentPosY, atCurrentPosX] == "#")
+            {
+                atCurrentPosX++;
+                break;
+            }
+
+            else
+            {
+                box[atCurrentPosY, atCurrentPosX+1] = "-";
+
+                break;
+
+            }
+            
+        case "RightArrow":
+            
+            atCurrentPosX++;
+            if (box[atCurrentPosY, atCurrentPosX] == "#")
+            {
+                atCurrentPosX--;
+                break;
+            }
+
+            else
+            {
+                box[atCurrentPosY, atCurrentPosX-1] = "-";
+                break;
+
+            }
+            
+    }
+
+    box[atCurrentPosY, atCurrentPosX] = "@";
+
+
+}
+
+
+
+//string[,] DrawBox(int height, int width)
+//{
+
+//    string[,] box = new string[height, width];
+
+
+//    for (int i = 0; i < height; i++)
+//    {
+//        if (i == 0 || i + 1 == height)
+//        {
+//            for (int j = 0; j < width; j++)
+//            {
+//                box[i, j] = "#";
+//            }
+
+//        }
+
+//        else
+//        {
+
+//            for (int j = 0; j < width; j++)
+//            {
+//                if (j == 0 || j == width - 1)
+//                {
+//                    box[i, j] = "#";
+//                }
+
+//                else
+//                {
+//                    box[i, j] = "-";
+//                }
+//            }
+
+//        }
+
+//    }
+//    return box;
+//}
+
+string[,] DrawBox(int height, int width, int hashtags)
 {
 
     string[,] box = new string[height, width];
@@ -54,12 +178,7 @@ string[,] DrawBox(int height, int width)
 
             for (int j = 0; j < width; j++)
             {
-                if (j == 0)
-                {
-                    box[i, j] = "#";
-                }
-
-                else if (j == width - 1)
+                if (j == 0 || j == width - 1)
                 {
                     box[i, j] = "#";
                 }
@@ -73,6 +192,12 @@ string[,] DrawBox(int height, int width)
         }
 
     }
+
+    for (int i = 0; i < hashtags; i++)
+    {
+        box[rnd.Next(1, height-1), rnd.Next(1, width-1)] = "#";
+    }
+
     return box;
 }
 
